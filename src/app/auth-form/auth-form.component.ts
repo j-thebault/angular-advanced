@@ -73,7 +73,10 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.email);
+    console.log(this.email.nativeElement);
+    if (this.email) {
+      this.email.nativeElement.setAttribute('placeholder', 'Enter your Email Address');
+    }
     if (this.message) {
       this.message.forEach((message: AuthMessageComponent) => {
         message.days = 30;
