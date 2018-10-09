@@ -1,4 +1,14 @@
-import {Component, Output, EventEmitter, AfterContentInit, ContentChildren, QueryList, AfterViewInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  AfterContentInit,
+  ContentChildren,
+  QueryList,
+  AfterViewInit,
+  ViewChild,
+  ViewChildren, ChangeDetectorRef, ElementRef
+} from '@angular/core';
 import {AuthRememberComponent} from './auth-remember.component';
 import {User} from './auth-form.interface';
 import {AuthMessageComponent} from './auth-message/auth-message.component';
@@ -11,7 +21,7 @@ import {AuthMessageComponent} from './auth-message/auth-message.component';
         <ng-content select="h3"></ng-content>
         <label>
           Email address
-          <input type="email" name="email" ngModel>
+          <input type="email" name="email" ngModel #email>
         </label>
         <label>
           Password
@@ -31,22 +41,25 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   @Output()
   submitted: EventEmitter<User> = new EventEmitter<User>();
 
+  @ViewChild('email')
+  email: ElementRef;
+
   @ContentChildren(AuthRememberComponent)
   remember: QueryList<AuthRememberComponent>;
 
-  @ViewChild(AuthMessageComponent)
-  message: AuthMessageComponent;
+  @ViewChildren(AuthMessageComponent)
+  message: QueryList<AuthMessageComponent>;
 
   showMessage: boolean;
+
+  constructor(private cd: ChangeDetectorRef) {
+  }
 
   onSubmit(value: User) {
     this.submitted.emit(value);
   }
 
   ngAfterContentInit(): void {
-    if (this.message) {
-      this.message.days = 30;
-    }
     if (this.remember) {
       this.remember.forEach(item => {
         console.log(item);
@@ -60,8 +73,15 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.message);
-    // this.message.days = 30;
+    console.log(this.email);
+    if (this.message) {
+      this.message.forEach((message: AuthMessageComponent) => {
+        message.days = 30;
+      });
+      // to avoid savage mutation after init
+      // we could probably move the mutating piece of code in ngAfterContentInit method ? It seems to work in Angular 6...
+      this.cd.detectChanges();
+    }
   }
 
 }
