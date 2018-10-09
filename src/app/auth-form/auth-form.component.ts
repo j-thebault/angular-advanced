@@ -7,7 +7,7 @@ import {
   QueryList,
   AfterViewInit,
   ViewChild,
-  ViewChildren, ChangeDetectorRef, ElementRef
+  ViewChildren, ChangeDetectorRef, ElementRef, Renderer2
 } from '@angular/core';
 import {AuthRememberComponent} from './auth-remember.component';
 import {User} from './auth-form.interface';
@@ -52,7 +52,7 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
 
   showMessage: boolean;
 
-  constructor(private cd: ChangeDetectorRef) {
+  constructor(private cd: ChangeDetectorRef, private renderer: Renderer2) {
   }
 
   onSubmit(value: User) {
@@ -75,7 +75,8 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   ngAfterViewInit(): void {
     console.log(this.email.nativeElement);
     if (this.email) {
-      this.email.nativeElement.setAttribute('placeholder', 'Enter your Email Address');
+      // this.email.nativeElement.setAttribute('placeholder', 'Enter your Email Address');
+      this.renderer.setAttribute(this.email.nativeElement, 'placeholder', 'Enter your Email Address');
     }
     if (this.message) {
       this.message.forEach((message: AuthMessageComponent) => {
