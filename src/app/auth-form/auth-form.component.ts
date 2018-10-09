@@ -17,8 +17,9 @@ import {AuthMessageComponent} from './auth-message/auth-message.component';
   selector: 'app-auth-form',
   template: `
     <div>
+      <br/>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
-        <ng-content select="h3"></ng-content>
+        <h3>{{title}}</h3>
         <label>
           Email address
           <input type="email" name="email" ngModel #email>
@@ -27,16 +28,19 @@ import {AuthMessageComponent} from './auth-message/auth-message.component';
           Password
           <input type="password" name="password" ngModel>
         </label>
-        <ng-content select="app-auth-remember"></ng-content>
         <!-- (showMessage ? 'inherit' : 'none') is a tricks to avoid an ngIf that will remove the ViewChild from the dom,
          hence we hide it by using display attribute but the DOM node is rendered -->
         <app-auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></app-auth-message>
-        <ng-content select="button"></ng-content>
+        <button type="submit">
+          Submit
+        </button>
       </form>
     </div>
   `
 })
 export class AuthFormComponent implements AfterContentInit, AfterViewInit {
+
+  title = 'Login';
 
   @Output()
   submitted: EventEmitter<User> = new EventEmitter<User>();
