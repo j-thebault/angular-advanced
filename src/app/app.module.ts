@@ -2,15 +2,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {MyForDirective} from './my-for/my-for.directive';
-import {FileSizePipe} from './file-size/file-size.pipe';
+
+import {StockInventoryModule} from './stock-inventory/stock-inventory.module';
 
 @NgModule({
   declarations: [
-    AppComponent, MyForDirective, FileSizePipe
+    AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, StockInventoryModule
   ],
   providers: [],
   bootstrap: [AppComponent]
