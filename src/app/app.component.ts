@@ -16,13 +16,20 @@ import {AuthFormComponent} from './auth-form/auth-form.component';
   styleUrls: ['./app.component.css'],
   template: `
     <div>
-      <div></div>
-      <div #entry></div>
+      <ng-container
+        [ngTemplateOutlet]="tmpl"
+        [ngTemplateOutletContext]="ctx"
+      ></ng-container>
       <ng-template #tmpl let-name let-location="location">{{name}} : {{location}}</ng-template>
     </div>
   `
 })
 export class AppComponent implements AfterContentInit, AfterViewInit {
+
+  ctx = {
+    $implicit: 'Julien',
+    location: 'France FRA'
+  };
 
   title = 'app';
 
@@ -55,10 +62,7 @@ export class AppComponent implements AfterContentInit, AfterViewInit {
   }
 
   ngAfterContentInit(): void {
-    this.entry.createEmbeddedView(this.tmpl, {
-      $implicit: 'Julien',
-      location: 'France FRA'
-    });
+
   }
 
   ngAfterViewInit(): void {
