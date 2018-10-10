@@ -5,21 +5,37 @@ import {Component, ChangeDetectionStrategy} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.Default,
   template: `
     <div>
-      <label>
-        Credit Card Number
-        <input name="credit-card" type="text" placeholder="Enter your 16-digit card number" appCreditCard/>
-      </label>
-      <label appTooltip="3 digits, back of your card" #myToolTip="tooltip">
-        Enter your security code
-        <span (mouseover)="myToolTip.show()" (mouseleave)="myToolTip.hide()">
-          (?)
-        </span>
-        <input type="text">
-      </label>
-      Toto
-      <app-span-tooltip [tooltipOptions]="{text:'external tooltip'}"></app-span-tooltip>
+      <ul>
+        <li *ngFor="let item of items; let i = index">
+          {{i}} Member: {{item.name | json}}
+        </li>
+        <ng-template appMyFor [appMyForOff]="items" let-item let-i="index">
+          <li>
+            {{i}} Member: {{item.name | json}}
+          </li>
+        </ng-template>
+      </ul>
     </div>
   `
 })
 export class AppComponent {
+  items = [{
+    name: 'Mark Hoppus',
+    age: 44,
+    location: 'California'
+  }, {
+    name: 'Tom Delonge',
+    age: 41,
+    location: 'California'
+  }, {
+    name: 'Travis Barker',
+    age: 41,
+    location: 'California'
+  }];
+
+  constructor() {
+    setTimeout(() => {
+      this.items = [...this.items, {name: 'Matt Skiba', age: 40, location: 'California'}];
+    }, 2000);
+  }
 }
