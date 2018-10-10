@@ -1,56 +1,40 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  ComponentFactoryResolver,
-  ComponentRef,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
-import {User} from './auth-form/auth-form.interface';
-import {AuthFormComponent} from './auth-form/auth-form.component';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default,
   template: `
     <div>
-      <app-example-one></app-example-one>
-      <app-example-two></app-example-two>
-      <app-example-three></app-example-three>
+      <button (click)="addProp()">Add property</button>
+      <button (click)="changeUser()">Change user object</button>
+      <button (click)="changeName()">Change name property</button>
+      <div class="users">
+        <app-example-one [user]="user"></app-example-one>
+        <app-example-two [user]="user"></app-example-two>
+      </div>
     </div>
   `
 })
-export class AppComponent implements AfterContentInit, AfterViewInit {
+export class AppComponent {
+  user: any = {
+    name: 'Mark Hoppus',
+    age: 44,
+    location: 'California'
+  };
 
-  title = 'app';
-
-  rememberMe: boolean;
-
-
-  constructor() {
-
+  addProp() {
+    this.user.email = 'blink@blink-182.net';
   }
 
-  handleRegistration($event: User) {
-    console.log('Register', $event);
+  changeName() {
+    this.user.name = 'Travis Barker';
   }
 
-  handleLogin($event: User) {
-    console.log('Login', $event, this.rememberMe);
+  changeUser() {
+    this.user = {
+      name: 'Tom Delonge',
+      age: 41,
+      location: 'California'
+    };
   }
-
-  handleRememberMe($event: boolean) {
-    this.rememberMe = $event;
-  }
-
-  ngAfterContentInit(): void {
-
-  }
-
-  ngAfterViewInit(): void {
-  }
-
-
 }
