@@ -1,10 +1,15 @@
-import {Directive, HostListener, ElementRef} from '@angular/core';
+import {Directive, HostListener, HostBinding, ElementRef} from '@angular/core';
 
 @Directive({
   selector: '[appCreditCard]'
 })
 export class CreditCardDirective {
 
+  // @HostBinding is biding a variable to an attribute of the host, much like a [propA]="value" inside the component tag
+  @HostBinding('style.border')
+  border: string;
+
+  // host listener is just an event listener
   @HostListener('input', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
@@ -21,6 +26,11 @@ export class CreditCardDirective {
 
     // injecting a space beetween each packet of 4 chars
     input.value = numbers.join(' ');
+
+    this.border = '';
+    if (/[^\d]+/.test(trimmed)) {
+      this.border = '1px solid red';
+    }
   }
 
   // injecting the element that is bound to the directive
