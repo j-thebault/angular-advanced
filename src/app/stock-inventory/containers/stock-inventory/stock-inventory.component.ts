@@ -10,9 +10,9 @@ import {Product} from '../../models/product.interface';
         <app-stock-branch
           [parent]="form"></app-stock-branch>
         <app-stock-selector
-          [parent]="form" [products]="products"></app-stock-selector>
+          [parent]="form" [products]="products" (added)="addStock($event)"></app-stock-selector>
         <app-stock-products
-          [parent]="form"></app-stock-products>
+          [parent]="form" (removed)="removeStock($event)"></app-stock-products>
 
         <div class="stock-inventory__buttons">
           <button type="submit" [disabled]="form.invalid">Order Stock</button>
@@ -65,4 +65,13 @@ export class StockInventoryComponent implements OnInit {
     });
   }
 
+  addStock($event: any) {
+    const control = this.form.get('stock') as FormArray;
+    control.push(this.createStock($event));
+  }
+
+  removeStock($event: any) {
+    const control = this.form.get('stock') as FormArray;
+    control.removeAt($event.index);
+  }
 }

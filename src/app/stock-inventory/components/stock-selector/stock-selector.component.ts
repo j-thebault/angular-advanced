@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {Product} from '../../models/product.interface';
 
@@ -18,7 +18,7 @@ import {Product} from '../../models/product.interface';
           Quantity
           <input type="number" step="10" min="10" max="1000" formControlName="quantity"/>
         </label><br>
-        <button type="button">Add Stock</button>
+        <button type="button" (click)="onAdd()">Add Stock</button>
       </div>
     </div>
   `,
@@ -32,10 +32,18 @@ export class StockSelectorComponent implements OnInit {
   @Input()
   products: Product[];
 
+  @Output()
+  added: EventEmitter<any> = new EventEmitter<any>();
+
   constructor() {
   }
 
   ngOnInit() {
   }
 
+  onAdd() {
+    this.added.emit(
+      this.parent.get('selector').value
+    );
+  }
 }
