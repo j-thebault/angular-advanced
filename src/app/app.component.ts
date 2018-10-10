@@ -1,4 +1,13 @@
-import {AfterContentInit, Component, ComponentFactoryResolver, ComponentRef, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {User} from './auth-form/auth-form.interface';
 import {AuthFormComponent} from './auth-form/auth-form.component';
 
@@ -7,20 +16,21 @@ import {AuthFormComponent} from './auth-form/auth-form.component';
   styleUrls: ['./app.component.css'],
   template: `
     <div>
-      <div>
-        <button (click)="handleDestroy($event)"> Destroy</button>
-        <button (click)="handleMove($event)"> Move</button>
-      </div>
-      <div #entry>
-      </div>
+      <div></div>
+      <div #entry></div>
+      <ng-template #tmpl let-name let-location="location">{{name}} : {{location}}</ng-template>
     </div>
   `
 })
-export class AppComponent implements AfterContentInit {
+export class AppComponent implements AfterContentInit, AfterViewInit {
+
   title = 'app';
 
   @ViewChild('entry', {read: ViewContainerRef})
   entry: ViewContainerRef;
+
+  @ViewChild('tmpl')
+  tmpl: TemplateRef<any>;
 
   rememberMe: boolean;
 
@@ -45,21 +55,14 @@ export class AppComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
-    this.entry.createComponent(authFormFactory);
-    this.component = this.entry.createComponent(authFormFactory, 0);
-    console.log(this.component.instance);
-    this.component.instance.title = 'Create Account';
-    this.component.instance.submitted.subscribe((user: User) => {
-      this.handleLogin(user);
+    this.entry.createEmbeddedView(this.tmpl, {
+      $implicit: 'Julien',
+      location: 'France FRA'
     });
   }
 
-  handleDestroy($event) {
-    this.component.destroy();
+  ngAfterViewInit(): void {
   }
 
-  handleMove($event) {
-    this.entry.move(this.component.hostView, 1);
-  }
+
 }
