@@ -16,36 +16,20 @@ import {AuthFormComponent} from './auth-form/auth-form.component';
   styleUrls: ['./app.component.css'],
   template: `
     <div>
-      <ng-container
-        [ngTemplateOutlet]="tmpl"
-        [ngTemplateOutletContext]="ctx"
-      ></ng-container>
-      <ng-template #tmpl let-name let-location="location">{{name}} : {{location}}</ng-template>
+      <app-example-one></app-example-one>
+      <app-example-two></app-example-two>
+      <app-example-three></app-example-three>
     </div>
   `
 })
 export class AppComponent implements AfterContentInit, AfterViewInit {
 
-  ctx = {
-    $implicit: 'Julien',
-    location: 'France FRA'
-  };
-
   title = 'app';
-
-  @ViewChild('entry', {read: ViewContainerRef})
-  entry: ViewContainerRef;
-
-  @ViewChild('tmpl')
-  tmpl: TemplateRef<any>;
 
   rememberMe: boolean;
 
-  private component: ComponentRef<AuthFormComponent>;
 
-  // The ComponentFactoryResolver is able to give us a ComponentFactory for a given ts Type
-  // Internally Angular probably maintain something like a Map<type,ComponentFactory>
-  constructor(private resolver: ComponentFactoryResolver) {
+  constructor() {
 
   }
 
