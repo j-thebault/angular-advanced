@@ -3,10 +3,11 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {MyForDirective} from './my-for/my-for.directive';
+import {FileSizePipe} from './file-size/file-size.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent, MyForDirective
+    AppComponent, MyForDirective, FileSizePipe
   ],
   imports: [
     BrowserModule
