@@ -7,18 +7,18 @@ import {Product} from '../../models/product.interface';
   template: `
     <div class="stock-selector" [formGroup]="parent">
       <div formGroupName="selector">
-        <label>
-          Select Stock
-          <select formControlName="product_id">
-            <option value="">No stock selected</option>
-            <option *ngFor="let product of products" [value]="product.id">{{product.name}}</option>
-          </select>
-        </label><br>
-        <label>
-          Quantity
-          <app-stock-counter [step]="10" [min]="10" [max]="1000" formControlName="quantity"></app-stock-counter>
-        </label><br>
-        <button type="button" (click)="onAdd()">Add Stock</button>
+        <select formControlName="product_id">
+          <option value="">No stock selected</option>
+          <option *ngFor="let product of products" [value]="product.id">{{product.name}}</option>
+        </select>
+        <app-stock-counter [step]="10" [min]="10" [max]="1000" formControlName="quantity"></app-stock-counter>
+        <button type="button" (click)="onAdd()" [disabled]="stockExists || notSelected">Add Stock</button>
+        <div
+          class="stock-selector__error"
+          *ngIf="stockExists"
+        >
+          The selected product already exist in stock
+        </div>
       </div>
     </div>
   `,
@@ -46,5 +46,13 @@ export class StockSelectorComponent implements OnInit {
       this.parent.get('selector').value
     );
     this.parent.get('selector').reset({product_id: '', quantity: 10});
+  }
+
+  get stockExists() {
+    return this.parent.hasError('stockExists') && this.parent.get('selector.product_id').dirty;
+  }
+
+  get notSelected() {
+    return !this.parent.get('selector.product_id').value;
   }
 }
