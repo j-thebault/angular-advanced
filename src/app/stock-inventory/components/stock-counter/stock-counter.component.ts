@@ -22,11 +22,17 @@ const COUNTER_CONTROL_ACCESSOR = {
   template: `
     <div class="stock-counter">
       <div>
-        <div>
+        <div
+          tabindex="0"
+          (keydown)="onKeyDown($event)"
+          (blur)="onBlur($event)"
+          (focus)="onFocus($event)"
+          [class.focused]="focus"
+        >
           <p>{{value}}</p>
           <div>
-            <button type="button" (click)="increment()" [disabled]="value === max" >+</button>
-            <button type="button" (click)="decrement()" [disabled]="value === min" >-</button>
+            <button type="button" (click)="increment()" [disabled]="value === max">+</button>
+            <button type="button" (click)="decrement()" [disabled]="value === min">-</button>
           </div>
         </div>
       </div>
@@ -44,6 +50,8 @@ export class StockCounterComponent implements OnInit, ControlValueAccessor {
   @Input() max = 1000;
 
   value = 10;
+
+  focus: boolean;
 
   constructor() {
   }
@@ -75,6 +83,7 @@ export class StockCounterComponent implements OnInit, ControlValueAccessor {
     this.onModelChange = fn;
   }
 
+  // will allow us to call the interval touched function directly from our code.
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
@@ -86,5 +95,37 @@ export class StockCounterComponent implements OnInit, ControlValueAccessor {
   writeValue(obj: any): void {
     console.log(obj);
     this.value = obj || 0;
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    // Arrays of handlers with keyboard code as key
+    const handlers = {
+      ArrowDown: () => this.decrement(),
+      ArrowUp: () => this.increment()
+    };
+
+    if (handlers[event.code]) {
+      handlers[event.code]();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    this.onTouch();
+  }
+
+  onBlur(event) {
+    console.log('blur');
+    this.focus = false;
+    event.preventDefault();
+    event.stopPropagation();
+    this.onTouch();
+  }
+
+  onFocus(event) {
+    console.log('focus');
+    this.focus = true;
+    event.preventDefault();
+    event.stopPropagation();
+    this.onTouch();
   }
 }

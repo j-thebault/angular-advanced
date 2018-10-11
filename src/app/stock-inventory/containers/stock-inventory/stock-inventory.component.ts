@@ -79,7 +79,6 @@ export class StockInventoryComponent implements OnInit {
         this.calculateTotal(value);
       });
 
-      this.form.get('selector').disable();
     });
 
   }
