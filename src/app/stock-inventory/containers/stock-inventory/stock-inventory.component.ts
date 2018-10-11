@@ -78,6 +78,8 @@ export class StockInventoryComponent implements OnInit {
         console.log(value);
         this.calculateTotal(value);
       });
+
+      this.form.get('selector').disable();
     });
 
   }
@@ -89,7 +91,7 @@ export class StockInventoryComponent implements OnInit {
   createStock(stock): FormGroup {
     return this.fb.group({
       product_id: parseInt(stock.product_id, 10) || '',
-      quantity: stock.quantity || 10
+      quantity: stock.quantity || 50
     });
   }
 

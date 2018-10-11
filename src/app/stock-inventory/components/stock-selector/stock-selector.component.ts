@@ -16,7 +16,7 @@ import {Product} from '../../models/product.interface';
         </label><br>
         <label>
           Quantity
-          <input type="number" step="10" min="10" max="1000" formControlName="quantity"/>
+          <app-stock-counter [step]="10" [min]="10" [max]="1000" formControlName="quantity"></app-stock-counter>
         </label><br>
         <button type="button" (click)="onAdd()">Add Stock</button>
       </div>
