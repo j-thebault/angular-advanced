@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, FormArray, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, FormArray, Validators, AbstractControl} from '@angular/forms';
 import {Product} from '../../models/product.interface';
 import {StockInventoryService} from '../../services/stock-inventory.service';
 import {forkJoin} from 'rxjs';
@@ -114,5 +114,9 @@ export class StockInventoryComponent implements OnInit {
       return quantity * price + accumulation;
     }, 0);
     this.total = total;
+  }
+
+  validateBranch(control: AbstractControl) {
+    // control.value
   }
 }

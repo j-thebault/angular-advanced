@@ -9,33 +9,45 @@
       "quantity": 50
     }
   ],
-  "products":
-    [
-      {
-        "id": 1,
-        "price": 2800,
-        "name": "Mac Book Pro"
-      },
-      {
-        "id": 2,
-        "price": 50,
-        "name": "USB-C Adaptor"
-      },
-      {
-        "id": 3,
-        "price": 400,
-        "name": "iPod"
-      },
-      {
-        "id": 4,
-        "price": 900,
-        "name": "iPhone"
-      },
-      {
-        "id": 5,
-        "price": 600,
-        "name": "Apple Watch"
-      }
-    ]
-
+  "products": [
+    {
+      "id": 1,
+      "price": 2800,
+      "name": "Mac Book Pro"
+    },
+    {
+      "id": 2,
+      "price": 50,
+      "name": "USB-C Adaptor"
+    },
+    {
+      "id": 3,
+      "price": 400,
+      "name": "iPod"
+    },
+    {
+      "id": 4,
+      "price": 900,
+      "name": "iPhone"
+    },
+    {
+      "id": 5,
+      "price": 600,
+      "name": "Apple Watch"
+    }
+  ],
+  "branches": [
+    {
+      "id": "B182"
+    },
+    {
+      "id": "A123"
+    },
+    {
+      "id": "Z888"
+    },
+    {
+      "id": "V478"
+    }
+  ]
 }
