@@ -45,5 +45,6 @@ export class StockSelectorComponent implements OnInit {
     this.added.emit(
       this.parent.get('selector').value
     );
+    this.parent.get('selector').reset({product_id: '', quantity: 10});
   }
 }
