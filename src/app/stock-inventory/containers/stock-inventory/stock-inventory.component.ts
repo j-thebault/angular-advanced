@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, FormArray} from '@angular/forms';
 import {Product} from '../../models/product.interface';
+import {StockInventoryService} from '../../services/stock-inventory.service';
+import {forkJoin} from 'rxjs';
+import {CartItem} from '../../models/cart-item.interface';
 
 @Component({
   selector: 'app-stock-inventory',
@@ -12,7 +15,9 @@ import {Product} from '../../models/product.interface';
         <app-stock-selector
           [parent]="form" [products]="products" (added)="addStock($event)"></app-stock-selector>
         <app-stock-products
-          [parent]="form" (removed)="removeStock($event)"></app-stock-products>
+          [parent]="form"
+          [map]="productMap"
+          (removed)="removeStock($event)"></app-stock-products>
 
         <div class="stock-inventory__buttons">
           <button type="submit" [disabled]="form.invalid">Order Stock</button>
@@ -27,13 +32,9 @@ import {Product} from '../../models/product.interface';
 })
 export class StockInventoryComponent implements OnInit {
 
-  products: Product[] = [
-    {id: 1, price: 2800, name: 'Mac Book Pro'},
-    {id: 2, price: 50, name: 'USB-C Adaptor'},
-    {id: 3, price: 400, name: 'iPod'},
-    {id: 4, price: 900, name: 'iPhone'},
-    {id: 5, price: 600, name: 'Apple Watch'}
-  ];
+  products: Product[];
+
+  productMap: Map<number, Product>;
 
   form = this.fb.group({
     store: this.fb.group({
@@ -41,16 +42,30 @@ export class StockInventoryComponent implements OnInit {
       code: ''
     }),
     selector: this.createStock({}),
-    stock: this.fb.array([
-      this.createStock({product_id: 1, quantity: 10}),
-      this.createStock({product_id: 3, quantity: 50})
-    ])
+    stock: this.fb.array([])
   });
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private stockService: StockInventoryService) {
   }
 
   ngOnInit() {
+    const cart$ = this.stockService.getCartItems();
+    const products$ = this.stockService.getProducts();
+
+    forkJoin(cart$, products$).subscribe(([cart, products]: [CartItem[], Product[]]) => {
+      console.log(products);
+      console.log(cart);
+      this.products = products;
+
+      const myMap = products.map<[number, Product]>(product => [product.id, product]);
+
+      this.productMap = new Map(myMap);
+
+      cart.forEach(item => {
+        const control = this.form.get('stock') as FormArray;
+        control.push(this.createStock(item));
+      });
+    });
 
   }
 
@@ -61,7 +76,7 @@ export class StockInventoryComponent implements OnInit {
   createStock(stock): FormGroup {
     return this.fb.group({
       product_id: parseInt(stock.product_id, 10) || '',
-      quantity: stock.quantity || 50
+      quantity: stock.quantity || 10
     });
   }
 

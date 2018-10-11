@@ -9,7 +9,8 @@ import {Product} from '../../models/product.interface';
       <div formArrayName="stock">
         <div *ngFor="let item of stocks; let i = index">
           <div class="stock-product__content" [formGroupName]="i">
-            <div class="stock-product__name">{{item.value.product_id}}</div>
+            <div class="stock-product__name">{{getProduct(item.value.product_id).name}}</div>
+            <div class="stock-product__price">{{getProduct(item.value.product_id).price | currency:'USD':true}}</div>
             <input
               type="number"
               step="10"
@@ -30,6 +31,9 @@ export class StockProductsComponent implements OnInit {
   @Input()
   parent: FormGroup;
 
+  @Input()
+  map: Map<number, Product>;
+
   @Output()
   removed: EventEmitter<any> = new EventEmitter<any>();
 
@@ -38,6 +42,10 @@ export class StockProductsComponent implements OnInit {
 
   get stocks() {
     return (this.parent.get('stock') as FormArray).controls;
+  }
+
+  getProduct(productId): Product {
+    return this.map.get(productId);
   }
 
   remove(group, index) {
