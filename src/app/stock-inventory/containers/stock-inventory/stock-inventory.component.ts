@@ -4,6 +4,7 @@ import {Product} from '../../models/product.interface';
 import {StockInventoryService} from '../../services/stock-inventory.service';
 import {forkJoin} from 'rxjs';
 import {CartItem} from '../../models/cart-item.interface';
+import {StockInventoryValidators} from './stock-inventory.validators';
 
 @Component({
   selector: 'app-stock-inventory',
@@ -42,7 +43,7 @@ export class StockInventoryComponent implements OnInit {
 
   form = this.fb.group({
     store: this.fb.group({
-      branch: ['', Validators.required],
+      branch: ['', [Validators.required, StockInventoryValidators.checkBranch]],
       code: ['', Validators.required]
     }),
     selector: this.createStock({}),

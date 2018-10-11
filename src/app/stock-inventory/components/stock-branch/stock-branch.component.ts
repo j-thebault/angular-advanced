@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
+import {INVALID_BRANCH_ERROR_CODE, StockInventoryValidators} from '../../containers/stock-inventory/stock-inventory.validators';
 
 @Component({
   selector: 'app-stock-branch',
@@ -11,6 +12,9 @@ import {FormGroup} from '@angular/forms';
           <input type="text" placeholder="Branch ID" formControlName="branch"/>
           <div class="error" *ngIf="required('branch')">
             Branch ID is Required
+          </div>
+          <div class="error" *ngIf="branchIsInvalid()">
+            Branch ID Must be : One Letter Three Numbers
           </div>
         </label>
         <label>
@@ -27,6 +31,8 @@ import {FormGroup} from '@angular/forms';
 })
 export class StockBranchComponent implements OnInit {
 
+  readonly INVALID_BRANCH_ERROR_CODE = INVALID_BRANCH_ERROR_CODE;
+
   @Input()
   parent: FormGroup;
 
@@ -37,10 +43,18 @@ export class StockBranchComponent implements OnInit {
   }
 
   required(controlName: string): boolean {
-    console.log(this.parent);
+    return this.hasError(controlName, 'required');
+  }
+
+  branchIsInvalid() {
+    return (this.hasError('branch', INVALID_BRANCH_ERROR_CODE) && !this.required('branch'));
+  }
+
+  hasError(controlName: string, errorCode: string) {
+    console.log('looking for error', errorCode, this.parent);
     return (
-      this.parent.get(`store.${controlName}`).hasError('required') &&
-      !this.parent.get(`store.${controlName}`).pristine
+      this.parent.get(`store.${controlName}`).hasError(errorCode) &&
+      this.parent.get(`store.${controlName}`).dirty
     );
   }
 
