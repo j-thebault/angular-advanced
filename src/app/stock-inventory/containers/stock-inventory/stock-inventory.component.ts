@@ -19,6 +19,10 @@ import {CartItem} from '../../models/cart-item.interface';
           [map]="productMap"
           (removed)="removeStock($event)"></app-stock-products>
 
+        <div>
+          Total: {{total | currency:'USD':'symbol'}}
+        </div>
+
         <div class="stock-inventory__buttons">
           <button type="submit" [disabled]="form.invalid">Order Stock</button>
         </div>
@@ -45,6 +49,8 @@ export class StockInventoryComponent implements OnInit {
     stock: this.fb.array([])
   });
 
+  total: number;
+
   constructor(private fb: FormBuilder, private stockService: StockInventoryService) {
   }
 
@@ -64,6 +70,13 @@ export class StockInventoryComponent implements OnInit {
       cart.forEach(item => {
         const control = this.form.get('stock') as FormArray;
         control.push(this.createStock(item));
+      });
+
+      this.calculateTotal(this.form.get('stock').value);
+
+      this.form.get('stock').valueChanges.subscribe(value => {
+        console.log(value);
+        this.calculateTotal(value);
       });
     });
 
@@ -88,5 +101,16 @@ export class StockInventoryComponent implements OnInit {
   removeStock($event: any) {
     const control = this.form.get('stock') as FormArray;
     control.removeAt($event.index);
+  }
+
+  calculateTotal(value: [CartItem]) {
+    const total = value.reduce((accumulation, currentProduct) => {
+      const productId = currentProduct.product_id;
+      const quantity = currentProduct.quantity;
+
+      const price = this.productMap.get(productId).price;
+      return quantity * price + accumulation;
+    }, 0);
+    this.total = total;
   }
 }
