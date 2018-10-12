@@ -11,13 +11,16 @@ import {NavigationEnd, Router} from '@angular/router';
       </header>
       <div class="app__content">
         <nav>
+          <!-- giving hint for the router to navigate to multiple outlet screen.
+           pane : null will ensure that no inner component is rendered -->
           <a
-            routerLink="folder/inbox"
-            routerLinkActive="active">
-            Inbox
+          [routerLink]="[{outlets: {primary: 'folder/inbox', pane:null}}]"
+          routerLinkActive="active"
+          >
+          Inbox
           </a>
           <a
-            routerLink="folder/trash"
+            [routerLink]="[{outlets: {primary: 'folder/trash', pane:null}}]"
             routerLinkActive="active">
             Trash
           </a>

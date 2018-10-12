@@ -14,4 +14,8 @@ export class MailService {
   getFolder(folder: string): Observable<Mail[]> {
     return this.http.get<Mail[]>(`/api/messages?folder=${folder}`);
   }
+
+  getMessage(id: string): Observable<Mail> {
+    return this.http.get<Mail>(`/api/messages/${id}`);
+  }
 }

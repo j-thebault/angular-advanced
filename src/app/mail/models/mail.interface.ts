@@ -4,4 +4,5 @@ export interface Mail {
   id: number;
   summary: string;
   timestamp: number;
+  full: string;
 }
