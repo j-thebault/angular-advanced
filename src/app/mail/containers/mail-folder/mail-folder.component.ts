@@ -1,24 +1,31 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { Mail } from '../../models/mail.interface';
+import {Mail} from '../../models/mail.interface';
+import {ActivatedRoute, Data} from '@angular/router';
+import {Observable} from 'rxjs';
+import {pluck} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-mail-folder',
   styleUrls: ['mail-folder.component.scss'],
   template: `
-    <h2>Inbox</h2>
+    <h2>{{title | async}}</h2>
     <app-mail-item
-      *ngFor="let message of messages"
+      *ngFor="let message of messages|async"
       [message]="message">
     </app-mail-item>
   `
 })
 export class MailFolderComponent {
-  messages: Mail[] = [{
-    'id': 1,
-    'folder': 'inbox',
-    'from': 'Jane Smith',
-    'summary': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur lobortis, neque at ultricies fringilla, ligula metus',
-    'timestamp': 1487848162905
-  }];
+  title: Observable<String> = this.route.params.pipe(
+    pluck('name')
+  );
+
+  messages: Observable<Mail[]> = this.route.data.pipe(
+    pluck('messages')
+  );
+
+  constructor(private route: ActivatedRoute) {
+
+  }
 }
