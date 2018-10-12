@@ -8,8 +8,7 @@ import {Router} from '@angular/router';
   styleUrls: ['mail-item.component.scss'],
   template: `
     <a class="mail-item"
-       [routerLink]="['',{ outlets:{pane:['message',message.id]}}]"
-       routerLinkActive=" active"
+       (click)="navigateToMessage()"
     >
       <h3>
         {{ message.from }}
@@ -27,6 +26,8 @@ export class MailItemComponent {
   }
 
   navigateToMessage() {
-
+    this.router.navigate(['', {
+      outlets: {pane: ['message', this.message.id]}
+    }]);
   }
 }
